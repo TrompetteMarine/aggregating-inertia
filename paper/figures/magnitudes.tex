@@ -1,0 +1,54 @@
+\documentclass[tikz,border=1pt,11pt]{standalone}
+\input{style}
+\input{values}
+% Figure 3. How much the record misses, across 60 computed economies (full reset).
+% Panel A: error of the kurtosis statistic Kurt/(6F) relative to the true response S.
+% Panel B: the part of S that no functional of the record can recover, (S_B - S_P)/S_B.
+% Panel C: the part of the mean lag that no functional of the record can recover, pausing clocks.
+% Data: data/magnitudes.csv and data/magnitudes_lag.csv (code/make_data.py).
+\begin{document}
+\begin{tikzpicture}
+\pgfplotsset{
+ magn/.style={
+  xmin=-0.5,xmax=3.5,
+  xtick={0,1,2,3},xticklabels={$0$,$0.25$,$1$,$2$},
+  xlabel={Pull $\lambda$},
+  scatter/classes={
+   0={mark=*,assess,mark size=1.6pt,draw=white,line width=.3pt},
+   1={mark=square*,process,mark size=1.5pt,draw=white,line width=.3pt},
+   2={mark=diamond*,process!70!black,mark size=2.0pt,draw=white,line width=.3pt},
+   3={mark=triangle*,event,mark size=2.0pt,draw=white,line width=.3pt}},
+  title style={font=\small\bfseries,text=ink,anchor=south west,at={(axis description cs:0,1.02)}},
+ },
+}
+\begin{groupplot}[
+ group style={group size=3 by 1,horizontal sep=15mm},
+ width=3.62cm,height=4.4cm,scale only axis,
+]
+\nextgroupplot[magn,ymin=-12,ymax=118,ytick={0,25,50,75,100},
+ ylabel={Error of $\mathrm{Kurt}/(6F)$, \% of $S$},
+ title={A.\ \ Kurtosis statistic},
+ legend style={draw=none,fill=white,fill opacity=.85,text opacity=1,font=\footnotesize,at={(axis description cs:0.02,0.86)},anchor=north west,row sep=-1.5pt},
+ legend cell align=left]
+\draw[rule!80,line width=.45pt,densely dotted] (axis cs:-0.5,0)--(axis cs:3.5,0);
+\addplot[scatter,only marks,scatter src=explicit symbolic,forget plot] table[x=x,y=kerr,meta=family,col sep=comma]{../../data/magnitudes.csv};
+\node[note,anchor=north west,align=left] at (axis cs:-0.45,112) {exact at $\lambda=0$};
+\addlegendimage{only marks,mark=*,assess,mark size=1.6pt}\addlegendentry{pausing clock}
+\addlegendimage{only marks,mark=square*,process,mark size=1.5pt}\addlegendentry{$\dot A=|U|$}
+\addlegendimage{only marks,mark=diamond*,process!70!black,mark size=2.0pt}\addlegendentry{$\dot A=U^2$}
+\addlegendimage{only marks,mark=triangle*,event,mark size=2.0pt}\addlegendentry{threshold in $A$}
+
+\nextgroupplot[magn,ymin=-3.0,ymax=0.45,ytick={-3,-2,-1,0},
+ ylabel={$(S_B-S_P)/S_B$, \%},
+ title={B.\ \ Location}]
+\draw[rule!80,line width=.45pt,densely dotted] (axis cs:-0.5,0)--(axis cs:3.5,0);
+\addplot[scatter,only marks,scatter src=explicit symbolic] table[x=x,y=gap,meta=family,col sep=comma]{../../data/magnitudes.csv};
+\node[note,anchor=north east,align=right] at (axis cs:3.45,0.4) {zero at $\lambda=0$};
+\nextgroupplot[magn,ymin=-8.5,ymax=1.2,ytick={-8,-6,-4,-2,0},
+ ylabel={$(\bar L_B-\bar L_P)/\bar L_B$, \%},
+ title={C.\ \ Speed}]
+\draw[rule!80,line width=.45pt,densely dotted] (axis cs:-0.5,0)--(axis cs:3.5,0);
+\addplot[only marks,mark=*,assess,mark size=1.6pt,draw=white,line width=.3pt,forget plot] table[x=x,y=gapL,col sep=comma]{../../data/magnitudes_lag.csv};
+\end{groupplot}
+\end{tikzpicture}
+\end{document}

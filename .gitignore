@@ -1,0 +1,6 @@
+rust/target/
+build/
+**/__pycache__/
+reference/code/solvers/*.so
+*.log
+!output/run_all.log

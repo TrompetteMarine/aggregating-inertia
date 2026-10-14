@@ -1,0 +1,46 @@
+% Shared style for all diagrams. Text: Times; mathematics: Computer Modern, as in the paper.
+% Figures are drawn at the paper's text width (432pt = 15.24cm), so sizes below are final.
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage{amsmath,amssymb}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows.meta,calc,positioning,backgrounds,patterns,shapes.geometric}
+\usepgfplotslibrary{groupplots,fillbetween}
+\pgfplotsset{compat=1.18}
+% Palette. Three identity hues (validated with the dataviz colour checks: lightness band,
+% chroma floor, all-pairs CVD separation >= 8.9, normal-vision separation >= 18.5,
+% contrast >= 3:1 on white) plus neutral inks and pale region fills.
+\definecolor{ink}{HTML}{1D2733}      % text and exact reference curves
+\definecolor{muted}{HTML}{56606B}    % secondary text
+\definecolor{rule}{HTML}{8A929A}     % axes, guides
+\definecolor{assess}{HTML}{1F6FA8}   % assessments; stable branches
+\definecolor{process}{HTML}{1E9E73}  % accumulated processing
+\definecolor{event}{HTML}{C5531F}    % completions, resets, driven paths
+\definecolor{tolfill}{HTML}{E3EDF5}  % tolerance region
+\definecolor{transfill}{HTML}{F2F4F6}% transition region
+\definecolor{pausefill}{HTML}{E4F3EC}% processing paused
+\tikzset{
+ >={Stealth[length=2.1mm,width=1.5mm]},
+ every picture/.append style={font=\small},
+ lbl/.style={font=\small,text=ink,inner sep=1.5pt},
+ note/.style={font=\footnotesize,text=muted,inner sep=1.5pt},
+ paneltitle/.style={font=\small\bfseries,text=ink,inner sep=0pt},
+ guide/.style={rule,line width=.45pt,densely dotted},
+ report/.style={diamond,draw=ink,fill=white,line width=.8pt,inner sep=0pt,minimum size=5.2pt},
+}
+\pgfplotsset{
+ every axis/.append style={
+  axis lines*=left,
+  axis line style={rule,line width=.5pt},
+  tick style={rule,line width=.5pt},
+  major tick length=2.2pt,
+  tick align=outside,
+  label style={font=\small,text=ink},
+  tick label style={font=\small,text=ink},
+  every axis plot/.append style={line width=1.15pt},
+  scaled ticks=false,
+  clip=false,
+  xlabel style={inner sep=1pt},
+  ylabel style={inner sep=1pt},
+ },
+}

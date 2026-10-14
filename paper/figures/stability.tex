@@ -1,0 +1,95 @@
+\documentclass[tikz,border=1pt,11pt]{standalone}
+\input{style}
+\input{values}
+\input{tipping_values}
+% Figure 2. Location, speed and shape near consensus.
+% Panels A-C: the clock economy of Example 1 (theta = 0.7, nu = 1, lambda = 1, full reset) for four
+% degrees of duration dependence eta. A: the kernel k(t). B: its Laplace transform on the imaginary
+% axis, scaled by S. C: the dominant root x_g of g khat(x) = 1 against gS, and (gS - 1)/Lbar.
+% Panel D: stationary averages with the social rule g c tanh(m/c) for two generalised hazards.
+% Data: code/make_data.py (stationary solvers code/solvers/fvsolver.py and ghf1d.py).
+\begin{document}
+\begin{tikzpicture}
+\pgfplotsset{
+ etaz/.style={rule,line width=1.05pt,densely dotted},
+ etao/.style={assess!55,line width=1.05pt,dashed},
+ etaf/.style={assess,line width=1.45pt},
+ etat/.style={event,line width=1.05pt,dash pattern=on 4pt off 1.5pt on 1pt off 1.5pt},
+ approx/.style={ink!70,line width=.55pt,dash pattern=on 2.2pt off 1.6pt},
+ upst/.style={assess,line width=1.35pt},
+ dnst/.style={event,line width=1.35pt},
+ dnun/.style={event,line width=1.0pt,dash pattern=on 3pt off 2pt},
+ cons/.style={ink,line width=1.1pt},
+ consun/.style={ink,line width=.9pt,dash pattern=on 3pt off 2pt},
+}
+\begin{groupplot}[
+ group style={group size=2 by 2,horizontal sep=18mm,vertical sep=21mm},
+ width=5.7cm,height=4.2cm,scale only axis,
+ title style={font=\small\bfseries,text=ink,anchor=south west,at={(axis description cs:0,1.02)}},
+]
+\nextgroupplot[xmin=0,xmax=5,ymin=0,ymax=1.05,ytick={0,0.5,1},
+ xlabel={Time $t$},ylabel={Response $k(t)$},
+ title={A.\ \ The response kernel},
+ legend style={draw=none,fill=none,font=\footnotesize,at={(axis description cs:0.98,0.98)},anchor=north east,row sep=-1.5pt},
+ legend cell align=left]
+\addplot[etaz] table[x=t,y=k0,col sep=comma]{../../data/stab_kernels.csv};
+\addplot[etao] table[x=t,y=k1,col sep=comma]{../../data/stab_kernels.csv};
+\addplot[etaf] table[x=t,y=k5,col sep=comma]{../../data/stab_kernels.csv};
+\addplot[etat] table[x=t,y=k20,col sep=comma]{../../data/stab_kernels.csv};
+\legend{$\eta=0$,$\eta=1$,$\eta=5$ (Example 1),$\eta=20$}
+\nextgroupplot[xmin=-0.08,xmax=1.12,ymin=-0.58,ymax=0.12,
+ xtick={0,0.5,1},ytick={-0.5,-0.25,0},
+ xlabel={$\mathrm{Re}\,\hat k(i\omega)/S$},ylabel={$\mathrm{Im}\,\hat k(i\omega)/S$},
+ title={B.\ \ Location: transfer on the imaginary axis}]
+\draw[rule!80,line width=.45pt] (axis cs:-0.08,0)--(axis cs:1.12,0);
+\draw[rule!80,line width=.45pt] (axis cs:0,-0.58)--(axis cs:0,0.12);
+\addplot[etaz] table[x=re,y=im,col sep=comma]{../../data/stab_nyquist_eta0.csv};
+\addplot[etao] table[x=re,y=im,col sep=comma]{../../data/stab_nyquist_eta1.csv};
+\addplot[etaf] table[x=re,y=im,col sep=comma]{../../data/stab_nyquist_eta5.csv};
+\addplot[etat] table[x=re,y=im,col sep=comma]{../../data/stab_nyquist_eta20.csv};
+\fill[ink] (axis cs:1,0) circle (1.6pt);
+\node[lbl,anchor=south] at (axis cs:1,0.01) {$\omega=0$};
+\node[note,anchor=north west,align=left] at (axis cs:0.05,-0.06) {$\omega\to\infty$};
+\addplot[ink!60,line width=.5pt,->,domain=-14:-74,samples=40] ({0.5+0.33*cos(x)},{0.335*sin(x)});
+\node[note,anchor=east,align=right] at (axis cs:0.60,-0.17) {increasing $\omega$};
+\nextgroupplot[xmin=0.6,xmax=1.4,ymin=-1.45,ymax=1.3,
+ xtick={0.6,0.8,1,1.2,1.4},ytick={-1,-0.5,0,0.5,1},
+ xlabel={Feedback relative to the threshold, $gS$},ylabel={Dominant root $x_g$},
+ title={C.\ \ Speed: critical slowing down}]
+\fill[tolfill,opacity=.7] (axis cs:0.6,-1.45) rectangle (axis cs:1,0);
+\draw[rule!80,line width=.45pt] (axis cs:0.6,0)--(axis cs:1.4,0);
+\draw[guide] (axis cs:1,-1.45)--(axis cs:1,1.3);
+\addplot[approx,forget plot] table[x=gS,y=l0,col sep=comma]{../../data/tip_rate.csv};
+\addplot[approx,forget plot] table[x=gS,y=l20,col sep=comma]{../../data/tip_rate.csv};
+\addplot[etaz] table[x=gS,y=x0,col sep=comma]{../../data/tip_rate.csv};
+\addplot[etao] table[x=gS,y=x1,col sep=comma]{../../data/tip_rate.csv};
+\addplot[etaf] table[x=gS,y=x5,col sep=comma]{../../data/tip_rate.csv};
+\addplot[etat] table[x=gS,y=x20,col sep=comma]{../../data/tip_rate.csv};
+\fill[ink] (axis cs:1,0) circle (1.5pt);
+\node[note,anchor=north west,align=left] at (axis cs:0.62,-0.05) {disturbances\\ decay};
+\node[note,anchor=north west,align=left] at (axis cs:1.03,1.27) {disturbances\\ grow};
+\node[note,anchor=north west,align=left,fill=white,inner sep=1pt] at (axis cs:1.02,-0.55) {dashed: $(gS-1)/\bar L$,\\ $\eta=0$ and $\eta=20$};
+\nextgroupplot[xmin=0.6,xmax=2.0,ymin=-6.6,ymax=6.6,
+ xtick={0.6,0.8,1,1.2,1.4,1.6,1.8,2},ytick={-6,-3,0,3,6},
+ xlabel={Feedback relative to the threshold, $gS$},ylabel={Stationary average $m$},
+ unbounded coords=jump,clip=true,clip mode=individual,
+ title={D.\ \ Shape: slow shift or tip}]
+\draw[guide] (axis cs:1,-6.6)--(axis cs:1,6.6);
+\draw[guide] (axis cs:\TipDownFold,-6.6)--(axis cs:\TipDownFold,6.6);
+\addplot[cons] coordinates {(0.6,0) (1,0)};
+\addplot[consun,forget plot] coordinates {(1,0) (2,0)};
+\addplot[upst] table[x=gS,y=m,col sep=comma]{../../data/tip_branch_up.csv};
+\addplot[dnst,restrict expr to domain={\thisrow{slope}}{-10:1}] table[x=gS,y=m,col sep=comma]{../../data/tip_branch_down.csv};
+\addplot[upst,forget plot] table[x=gS,y expr=-\thisrow{m},col sep=comma]{../../data/tip_branch_up.csv};
+\addplot[dnst,forget plot,restrict expr to domain={\thisrow{slope}}{-10:1}] table[x=gS,y expr=-\thisrow{m},col sep=comma]{../../data/tip_branch_down.csv};
+\addplot[dnun,forget plot,restrict expr to domain={\thisrow{slope}}{1:10}] table[x=gS,y=m,col sep=comma]{../../data/tip_branch_down.csv};
+\addplot[dnun,forget plot,restrict expr to domain={\thisrow{slope}}{1:10}] table[x=gS,y expr=-\thisrow{m},col sep=comma]{../../data/tip_branch_down.csv};
+\node[font=\footnotesize,text=assess,anchor=north] at (axis cs:1.6,-2.0) {hazard rising with $|u|$};
+\node[font=\footnotesize,text=event,anchor=south] at (axis cs:1.45,4.0) {hazard falling with $|u|$};
+\draw[->,ink!75,line width=.6pt] (axis cs:1.03,0.25)--(axis cs:1.03,\TipDownJumpM-0.25);
+\draw[->,ink!75,line width=.6pt] (axis cs:\TipDownFold-0.03,\TipDownFoldM-0.2)--(axis cs:\TipDownFold-0.03,0.25);
+\draw[<->,ink!75,line width=.6pt] (axis cs:\TipDownFold,4.7)--(axis cs:1,4.7);
+\node[note,anchor=south] at (axis cs:0.91,4.9) {lock-in};
+\end{groupplot}
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this code or these results, please cite the paper."
+title: "Aggregating Inertia: computations"
+type: software
+authors:
+  - family-names: Bontemps
+    given-names: "Gabriel L. S."
+    affiliation: "GREDEG-CNRS, Université Côte d'Azur; Blizard Institute, Queen Mary University of London; Adaptive Decisions Lab, University of Oxford"
+    email: g.l.s.bontemps@qmul.ac.uk
+license: MIT
+date-released: 2026-10-14
+preferred-citation:
+  type: article
+  title: "Aggregating Inertia: Tipping, Slow Shifts and What Revision Records Reveal"
+  authors:
+    - family-names: Bontemps
+      given-names: "Gabriel L. S."
+  journal: "SSRN Working Paper"
+  year: 2026
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6019456"

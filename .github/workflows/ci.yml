@@ -1,0 +1,87 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "Recompute everything (about 70 minutes on two cores) and compare with the reference"
+        type: boolean
+        default: false
+
+jobs:
+  engine:
+    name: Rust engine (tests, cross-check against the reference solvers)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install numpy scipy
+      - name: Unit tests
+        run: make test
+      - name: Rust against the reference Python and C solvers
+        run: make crosscheck
+      - name: Committed outputs against the reference outputs
+        run: make check
+      - name: Figure data and macros recomputed from the committed research outputs
+        run: |
+          cp -r output /tmp/out
+          rust/target/release/inertia --out /tmp/out figures
+          rust/target/release/inertia --out /tmp/out tables
+          python3 tests_ref/compare_outputs.py /tmp/out reference
+
+  figures:
+    name: Figures (Julia, Makie)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: "1.12"
+      - uses: julia-actions/cache@v2
+      - run: julia --project=julia -e 'using Pkg; Pkg.instantiate()'
+      - run: make figures FIGS=ci-figures
+      - uses: actions/upload-artifact@v4
+        with:
+          name: figures
+          path: ci-figures
+
+  docker:
+    name: Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: aggregating-inertia:ci
+          load: true
+      - name: Figures inside the image
+        run: docker run --rm -v "$PWD/docker-figures:/work/figures" aggregating-inertia:ci figures
+
+  full:
+    name: Everything from scratch
+    if: github.event_name == 'workflow_dispatch' && inputs.full
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install numpy scipy
+      - run: make engine && make data OUT=fresh && python3 tests_ref/compare_outputs.py fresh reference
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fresh-output
+          path: fresh

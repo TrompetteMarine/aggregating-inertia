@@ -1,0 +1,105 @@
+\documentclass[tikz,border=1pt,11pt]{standalone}
+\input{style}
+\input{values}
+% Figure 1. One reassessment episode in the running economy (Example 1): a prescribed
+% assessment path (panel A), the processing clock integrated exactly from it (panel B), and
+% the completion hazard the two imply (panel C). The record keeps the duration and the
+% revision; it does not keep the clock or the area under the path. Data: code/make_data.py.
+\begin{document}
+\begin{tikzpicture}
+\pgfmathsetmacro{\PauseMid}{(\EpPauseLo+\EpPauseHi)/2}
+\begin{groupplot}[
+ group style={group size=1 by 3,vertical sep=4.6mm},
+ width=12.4cm,scale only axis,
+ xmin=0,xmax=10.2,
+]
+%% Panel A: assessment, area, and what the record keeps
+\nextgroupplot[
+ height=3.0cm,ymin=-1.15,ymax=2.62,
+ xtick=\empty,
+ ytick={-0.7,0,0.7,1.4},yticklabels={$-\theta$,$0$,$\theta$,$2\theta$},
+ ylabel={Assessment $U$},
+]
+\begin{pgfonlayer}{background}
+\fill[transfill] (axis cs:0,-1.15) rectangle (axis cs:10.2,1.4);
+\fill[tolfill] (axis cs:0,-0.7) rectangle (axis cs:10.2,0.7);
+\fill[pausefill,opacity=.85] (axis cs:\EpPauseLo,-1.15) rectangle (axis cs:\EpPauseHi,2.62);
+\end{pgfonlayer}
+\addplot[fill=assess,fill opacity=.13,draw=none] table[x=time,y=assessment,col sep=comma]{../../data/episode_area.csv} -- cycle;
+\draw[assess!45,line width=.4pt,densely dashed] (axis cs:0,0.7)--(axis cs:10.2,0.7);
+\draw[assess!45,line width=.4pt,densely dashed] (axis cs:0,-0.7)--(axis cs:10.2,-0.7);
+\draw[rule!70,line width=.4pt,densely dotted] (axis cs:0,1.4)--(axis cs:10.2,1.4);
+\draw[rule!70,line width=.4pt] (axis cs:0,0)--(axis cs:10.2,0);
+\node[note,anchor=west,align=left] at (axis cs:10.3,1.95) {active\\[-1pt]$\alpha=\chi=1$};
+\node[note,anchor=west] at (axis cs:10.3,1.05) {partial};
+\node[note,anchor=west,align=left] at (axis cs:10.3,0) {tolerance\\[-1pt]$\alpha=\chi=0$};
+\node[note,anchor=west] at (axis cs:10.3,-0.84) {partial};
+\node[font=\footnotesize\itshape,text=process!80!black,anchor=north] at (axis cs:\PauseMid,2.58) {review pauses};
+\node[lbl,text=assess!85!black,anchor=center,align=center,fill=white,fill opacity=.75,text opacity=1,rounded corners=1pt]
+  at (axis cs:7.02,1.04) {area $I_\tau$:\\[-2pt]not recorded};
+\addplot[assess,line width=1.3pt] table[x=time,y=assessment,col sep=comma]{../../data/episode_before.csv};
+\addplot[assess,line width=1.3pt] table[x=time,y=assessment,col sep=comma]{../../data/episode_after.csv};
+\draw[event,line width=.5pt,densely dashed] (axis cs:\EpTc,-1.15)--(axis cs:\EpTc,2.62);
+\draw[event,line width=1.15pt,->] (axis cs:\EpTc,\EpUpre)--(axis cs:\EpTc,0.1);
+\fill[event] (axis cs:\EpTc,0) circle (1.7pt);
+\node[lbl,text=event,anchor=west,align=left] at (axis cs:\EpTc+0.1,1.62) {revision\\[-1pt]$\Delta=-U_{\tau-}$};
+\node[lbl,text=event,anchor=east] at (axis cs:\EpTc-0.08,2.36) {completion};
+% duration bracket
+\draw[ink,line width=.6pt,{Bar[width=2.6mm]}-{Bar[width=2.6mm]}] (axis cs:0,-0.95)--(axis cs:\EpTc,-0.95);
+\node[lbl,fill=transfill,anchor=center] at (axis cs:1.15,-0.95) {duration $\tau$};
+\draw[ink!60,line width=.5pt,dash pattern=on 1.2pt off 1.6pt] (axis cs:\EpTrOne,\EpUstar)--(axis cs:\EpTrTwo,\EpUstar);
+\node[report] (r1) at (axis cs:\EpTrOne,\EpUstar) {};
+\node[report] (r2) at (axis cs:\EpTrTwo,\EpUstar) {};
+\node[lbl,anchor=north] at (axis cs:9.12,\EpUstar-0.07) {same $U$};
+\node[paneltitle,anchor=north west] at (axis description cs:0.012,0.985) {A};
+%% Panel B: processing (hidden)
+\nextgroupplot[
+ height=1.5cm,ymin=-0.3,ymax=4.7,
+ ytick={0},xtick=\empty,
+ ylabel={Processing $A$},
+]
+\begin{pgfonlayer}{background}
+\fill[pausefill,opacity=.85] (axis cs:\EpPauseLo,-0.3) rectangle (axis cs:\EpPauseHi,4.7);
+\end{pgfonlayer}
+\draw[rule!70,line width=.4pt] (axis cs:0,0)--(axis cs:10.2,0);
+\addplot[process,line width=1.3pt] table[x=time,y=processing,col sep=comma]{../../data/episode_before.csv};
+\addplot[process,line width=1.3pt] table[x=time,y=processing,col sep=comma]{../../data/episode_after.csv};
+\draw[event,line width=.5pt,densely dashed] (axis cs:\EpTc,-0.3)--(axis cs:\EpTc,4.7);
+\draw[event,line width=1.1pt,->] (axis cs:\EpTc,\EpApre)--(axis cs:\EpTc,0.1);
+\node[lbl,text=event,anchor=east] at (axis cs:\EpTc-0.12,2.1) {cleared};
+\node[lbl,text=process!70!black,anchor=south east] at (axis cs:2.55,1.05) {advances};
+\node[lbl,text=process!70!black,anchor=south west] at (axis cs:\EpTrOne+0.22,\EpArOne+0.18) {retained};
+\node[lbl,text=process!70!black,anchor=south east] at (axis cs:1.38,0.05) {idle};
+\node[note,anchor=west] at (axis cs:10.3,2.2) {hidden};
+\node[report] (s1) at (axis cs:\EpTrOne,\EpArOne) {};
+\node[report] (s2) at (axis cs:\EpTrTwo,0) {};
+\node[note,anchor=north east,inner sep=2pt] at (axis cs:\EpTrOne-0.04,\EpArOne-0.1) {$A>0$};
+\node[note,anchor=south west,inner sep=2pt] at (axis cs:\EpTrTwo+0.08,0.1) {$A=0$};
+\node[paneltitle,anchor=north west] at (axis description cs:0.012,0.97) {B};
+%% Panel C: completion hazard
+\nextgroupplot[
+ height=2.05cm,ymin=0.4,ymax=6.6,
+ ytick={1},yticklabels={$\nu$},
+ xtick={\EpTc},xticklabels={$\tau$},
+ xlabel={Time since the episode began},
+ xlabel style={at={(axis description cs:0.5,-0.1)},anchor=north},
+ ylabel={Hazard $H$},
+]
+\begin{pgfonlayer}{background}
+\fill[pausefill,opacity=.85] (axis cs:\EpPauseLo,0.4) rectangle (axis cs:\EpPauseHi,6.6);
+\end{pgfonlayer}
+\draw[rule!70,line width=.4pt,densely dotted] (axis cs:0,1)--(axis cs:10.2,1);
+\addplot[event,line width=1.3pt] table[x=time,y=hazard,col sep=comma]{../../data/episode_before.csv};
+\addplot[event,line width=1.3pt] table[x=time,y=hazard,col sep=comma]{../../data/episode_after.csv};
+\draw[event,line width=.5pt,densely dashed] (axis cs:\EpTc,0.4)--(axis cs:\EpTc,6.6);
+\node[report] at (axis cs:\EpTrOne,\EpHazRone) {};
+\node[report] at (axis cs:\EpTrTwo,\EpHazRtwo) {};
+\node[note,anchor=north,align=center,inner sep=1.5pt] at (axis cs:\PauseMid,6.5) {dormant: $\chi=0$};
+\node[note,anchor=north west,align=left,inner sep=1.5pt] at (axis cs:5.98,4.6)
+  {processing kept:\\[-1pt]hazard climbs fast};
+\node[paneltitle,anchor=north west] at (axis description cs:0.012,0.97) {C};
+\end{groupplot}
+\draw[ink!55,line width=.45pt,dash pattern=on 1.2pt off 1.6pt] (r1.south)--(s1.north);
+\draw[ink!55,line width=.45pt,dash pattern=on 1.2pt off 1.6pt] (r2.south)--(s2.north);
+\end{tikzpicture}
+\end{document}

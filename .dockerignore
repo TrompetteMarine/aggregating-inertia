@@ -1,0 +1,6 @@
+rust/target
+figures
+reference
+tests_ref
+.git
+**/*.so

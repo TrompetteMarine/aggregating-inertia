@@ -1,0 +1,218 @@
+[inertia] grid lam=0 theta=0.7 eta=5 nu=1.0000: S_B=0.530304 S_P=0.530304 gap=+0.0000% (57s)
+[inertia] grid lam=0 theta=0.35 eta=0.6 nu=1.0000: S_B=0.765083 S_P=0.765083 gap=+0.0000% (63s)
+[inertia] grid lam=0 theta=0.35 eta=2 nu=1.0000: S_B=0.560656 S_P=0.560656 gap=+0.0000% (42s)
+[inertia] grid lam=0 theta=0.7 eta=0.6 nu=0.7136: S_B=1.020831 S_P=1.020831 gap=+0.0000% (86s)
+[inertia] grid lam=0 theta=0.35 eta=5 nu=1.0000: S_B=0.414006 S_P=0.414006 gap=+0.0000% (45s)
+[inertia] grid lam=0 theta=1 eta=0.6 nu=1.0000: S_B=0.863065 S_P=0.863065 gap=+0.0000% (73s)
+[inertia] grid lam=0 theta=0.35 eta=0.6 nu=0.7136: S_B=0.940863 S_P=0.940863 gap=+0.0000% (72s)
+[inertia] grid lam=0 theta=0.7 eta=0.6 nu=1.0000: S_B=0.818852 S_P=0.818852 gap=+0.0000% (69s)
+[inertia] grid lam=0 theta=1 eta=2 nu=1.0000: S_B=0.734442 S_P=0.734442 gap=+0.0000% (76s)
+[inertia] grid lam=0 theta=0.7 eta=2 nu=1.0000: S_B=0.654270 S_P=0.654270 gap=+0.0000% (69s)
+[inertia] grid lam=0 theta=1 eta=5 nu=1.0000: S_B=0.633797 S_P=0.633797 gap=+0.0000% (81s)
+[inertia] grid lam=0 theta=1 eta=0.6 nu=0.7136: S_B=1.092540 S_P=1.092540 gap=+0.0000% (82s)
+[inertia] grid lam=0 done in 441s
+[inertia] grid lam=0.25 theta=0.7 eta=5 nu=1.0000: S_B=0.499087 S_P=0.501858 gap=-0.5553% (62s)
+[inertia] grid lam=0.25 theta=0.35 eta=0.6 nu=1.0000: S_B=0.652554 S_P=0.653984 gap=-0.2191% (67s)
+[inertia] grid lam=0.25 theta=0.35 eta=2 nu=1.0000: S_B=0.504309 S_P=0.506415 gap=-0.4178% (50s)
+[inertia] grid lam=0.25 theta=0.35 eta=5 nu=1.0000: S_B=0.385963 S_P=0.387925 gap=-0.5082% (40s)
+[inertia] grid lam=0.25 theta=0.7 eta=0.6 nu=0.7136: S_B=0.848168 S_P=0.851821 gap=-0.4306% (98s)
+[inertia] grid lam=0.25 theta=0.35 eta=0.6 nu=0.7136: S_B=0.777941 S_P=0.780246 gap=-0.2964% (82s)
+[inertia] grid lam=0.25 theta=1 eta=0.6 nu=1.0000: S_B=0.737034 S_P=0.738568 gap=-0.2082% (80s)
+[inertia] grid lam=0.25 theta=0.7 eta=0.6 nu=1.0000: S_B=0.700033 S_P=0.701968 gap=-0.2764% (73s)
+[inertia] grid lam=0.25 theta=1 eta=2 nu=1.0000: S_B=0.664118 S_P=0.666518 gap=-0.3614% (74s)
+[inertia] grid lam=0.25 theta=0.7 eta=2 nu=1.0000: S_B=0.591951 S_P=0.594838 gap=-0.4877% (65s)
+[inertia] grid lam=0.25 theta=1 eta=5 nu=1.0000: S_B=0.596943 S_P=0.599388 gap=-0.4096% (72s)
+[inertia] grid lam=0.25 theta=1 eta=0.6 nu=0.7136: S_B=0.909237 S_P=0.912530 gap=-0.3623% (58s)
+[inertia] grid lam=0.25 done in 436s
+[inertia] grid lam=1 theta=0.35 eta=0.6 nu=1.0000: S_B=0.451112 S_P=0.453215 gap=-0.4662% (38s)
+[inertia] grid lam=1 theta=0.7 eta=5 nu=1.0000: S_B=0.416637 S_P=0.420777 gap=-0.9937% (39s)
+[inertia] grid lam=1 theta=0.35 eta=2 nu=1.0000: S_B=0.386193 S_P=0.390158 gap=-1.0266% (29s)
+[inertia] grid lam=1 theta=0.35 eta=5 nu=1.0000: S_B=0.320356 S_P=0.324928 gap=-1.4272% (24s)
+[inertia] grid lam=1 theta=0.7 eta=0.6 nu=0.7136: S_B=0.553965 S_P=0.556374 gap=-0.4347% (59s)
+[inertia] grid lam=1 theta=0.35 eta=0.6 nu=0.7136: S_B=0.509529 S_P=0.512527 gap=-0.5883% (49s)
+[inertia] grid lam=1 theta=1 eta=0.6 nu=1.0000: S_B=0.495063 S_P=0.495502 gap=-0.0887% (46s)
+[inertia] grid lam=1 theta=0.7 eta=0.6 nu=1.0000: S_B=0.481631 S_P=0.483091 gap=-0.3031% (44s)
+[inertia] grid lam=1 theta=1 eta=2 nu=1.0000: S_B=0.486013 S_P=0.487095 gap=-0.2225% (44s)
+[inertia] grid lam=1 theta=0.7 eta=2 nu=1.0000: S_B=0.452403 S_P=0.455519 gap=-0.6888% (41s)
+[inertia] grid lam=1 theta=1 eta=5 nu=1.0000: S_B=0.472821 S_P=0.474527 gap=-0.3608% (44s)
+[inertia] grid lam=1 theta=1 eta=0.6 nu=0.7136: S_B=0.575340 S_P=0.576130 gap=-0.1372% (34s)
+[inertia] grid lam=1 done in 259s
+[inertia] grid lam=2 theta=0.35 eta=0.6 nu=1.0000: S_B=0.317737 S_P=0.318911 gap=-0.3696% (33s)
+[inertia] grid lam=2 theta=0.7 eta=5 nu=1.0000: S_B=0.319700 S_P=0.321027 gap=-0.4149% (35s)
+[inertia] grid lam=2 theta=0.35 eta=2 nu=1.0000: S_B=0.292180 S_P=0.294935 gap=-0.9427% (27s)
+[inertia] grid lam=2 theta=0.35 eta=5 nu=1.0000: S_B=0.259879 S_P=0.263907 gap=-1.5499% (22s)
+[inertia] grid lam=2 theta=0.7 eta=0.6 nu=0.7136: S_B=0.365521 S_P=0.365884 gap=-0.0992% (50s)
+[inertia] grid lam=2 theta=1 eta=0.6 nu=1.0000: S_B=0.333171 S_P=0.333189 gap=-0.0052% (38s)
+[inertia] grid lam=2 theta=0.35 eta=0.6 nu=0.7136: S_B=0.346627 S_P=0.348144 gap=-0.4377% (43s)
+[inertia] grid lam=2 theta=1 eta=2 nu=1.0000: S_B=0.332810 S_P=0.332865 gap=-0.0164% (38s)
+[inertia] grid lam=2 theta=0.7 eta=0.6 nu=1.0000: S_B=0.331236 S_P=0.331487 gap=-0.0757% (37s)
+[inertia] grid lam=2 theta=0.7 eta=2 nu=1.0000: S_B=0.326947 S_P=0.327655 gap=-0.2164% (36s)
+[inertia] grid lam=2 theta=1 eta=5 nu=1.0000: S_B=0.332107 S_P=0.332227 gap=-0.0362% (37s)
+[inertia] grid lam=2 theta=1 eta=0.6 nu=0.7136: S_B=0.368283 S_P=0.368308 gap=-0.0070% (27s)
+[inertia] grid lam=2 done in 225s
+[inertia] dist lam=0 eta=5: S_B=0.382939 S_P=0.382939
+[inertia] dist lam=1 eta=5: S_B=0.300879 S_P=0.304263
+[inertia] dist lam=1 eta=2: S_B=0.370542 S_P=0.373816
+[inertia] dist lam=1 eta=20: S_B=0.200715 S_P=0.202890
+[inertia] dist lam=2 eta=20: S_B=0.176344 S_P=0.179277
+[inertia] dist lam=2 eta=5: S_B=0.242874 S_P=0.246137
+[inertia] sq lam=1 eta=5: S_B=0.319153 S_P=0.324657
+[inertia] sq lam=1 eta=2: S_B=0.382384 S_P=0.387531
+[inertia] sq lam=1 eta=20: S_B=0.226915 S_P=0.230858
+[inertia] distthr_0.5 lam=1 eta=50: S_B=0.273297 S_P=0.280559
+[inertia] distthr_1.0 lam=0 eta=50: S_B=0.449762 S_P=0.449762
+[inertia] distthr_1.0 lam=1 eta=50: S_B=0.371788 S_P=0.381233
+[inertia] speed lam=1 theta=0.35 eta=0.6 nu=0.7136: gapL=-2.125%
+[inertia] speed lam=1 theta=0.35 eta=0.6 nu=1.0000: gapL=-1.824%
+[inertia] speed lam=1 theta=0.35 eta=2 nu=1.0000: gapL=-4.515%
+[inertia] speed lam=0 theta=0.35 eta=0.6 nu=0.7136: gapL=-1.629%
+[inertia] speed lam=1 theta=0.35 eta=5 nu=1.0000: gapL=-7.244%
+[inertia] speed lam=1 theta=0.7 eta=0.6 nu=0.7136: gapL=-1.567%
+[inertia] speed lam=0 theta=0.35 eta=0.6 nu=1.0000: gapL=-1.440%
+[inertia] speed lam=1 theta=0.7 eta=0.6 nu=1.0000: gapL=-1.190%
+[inertia] speed lam=0 theta=0.35 eta=2 nu=1.0000: gapL=-3.894%
+[inertia] speed lam=1 theta=0.7 eta=2 nu=1.0000: gapL=-2.765%
+[inertia] speed lam=1 theta=0.7 eta=5 nu=1.0000: gapL=-4.115%
+[inertia] speed lam=0 theta=0.35 eta=5 nu=1.0000: gapL=-6.559%
+[inertia] speed lam=1 theta=1 eta=0.6 nu=0.7136: gapL=-0.490%
+[inertia] speed lam=1 theta=1 eta=0.6 nu=1.0000: gapL=-0.346%
+[inertia] speed lam=0 theta=0.7 eta=0.6 nu=0.7136: gapL=-2.485%
+[inertia] speed lam=1 theta=1 eta=2 nu=1.0000: gapL=-0.857%
+[inertia] speed lam=1 theta=1 eta=5 nu=1.0000: gapL=-1.371%
+[inertia] speed lam=2 theta=0.35 eta=0.6 nu=0.7136: gapL=-1.412%
+[inertia] speed lam=0 theta=0.7 eta=0.6 nu=1.0000: gapL=-1.930%
+[inertia] speed lam=2 theta=0.35 eta=0.6 nu=1.0000: gapL=-1.251%
+[inertia] speed lam=2 theta=0.35 eta=2 nu=1.0000: gapL=-3.325%
+[inertia] speed lam=2 theta=0.35 eta=5 nu=1.0000: gapL=-5.805%
+[inertia] speed lam=0 theta=0.7 eta=2 nu=1.0000: gapL=-4.309%
+[inertia] speed lam=2 theta=0.7 eta=0.6 nu=0.7136: gapL=-0.320%
+[inertia] speed lam=2 theta=0.7 eta=0.6 nu=1.0000: gapL=-0.257%
+[inertia] speed lam=0 theta=0.7 eta=5 nu=1.0000: gapL=-5.953%
+[inertia] speed lam=2 theta=0.7 eta=2 nu=1.0000: gapL=-0.729%
+[inertia] speed lam=2 theta=0.7 eta=5 nu=1.0000: gapL=-1.382%
+[inertia] speed lam=2 theta=1 eta=0.6 nu=0.7136: gapL=-0.021%
+[inertia] speed lam=0 theta=1 eta=0.6 nu=0.7136: gapL=-2.327%
+[inertia] speed lam=2 theta=1 eta=0.6 nu=1.0000: gapL=-0.017%
+[inertia] speed lam=2 theta=1 eta=2 nu=1.0000: gapL=-0.053%
+[inertia] speed lam=2 theta=1 eta=5 nu=1.0000: gapL=-0.116%
+[inertia] speed lam=0 theta=1 eta=0.6 nu=1.0000: gapL=-1.647%
+[inertia] speed lam=0.25 theta=0.35 eta=0.6 nu=0.7136: gapL=-2.024%
+[inertia] speed lam=0 theta=1 eta=2 nu=1.0000: gapL=-3.236%
+[inertia] speed lam=0.25 theta=0.35 eta=0.6 nu=1.0000: gapL=-1.731%
+[inertia] speed lam=0.25 theta=0.35 eta=2 nu=1.0000: gapL=-4.364%
+[inertia] speed lam=0 theta=1 eta=5 nu=1.0000: gapL=-4.012%
+[inertia] speed lam=0.25 theta=0.35 eta=5 nu=1.0000: gapL=-7.028%
+[inertia] speed lam=0.25 theta=0.7 eta=2 nu=1.0000: gapL=-4.423%
+[inertia] speed lam=0.25 theta=0.7 eta=0.6 nu=0.7136: gapL=-2.825%
+[inertia] speed lam=0.25 theta=0.7 eta=5 nu=1.0000: gapL=-5.914%
+[inertia] speed lam=0.25 theta=0.7 eta=0.6 nu=1.0000: gapL=-2.108%
+[inertia] speed lam=0.25 theta=1 eta=0.6 nu=0.7136: gapL=-2.260%
+[inertia] speed lam=0.25 theta=1 eta=0.6 nu=1.0000: gapL=-1.528%
+[inertia] speed lam=0.25 theta=1 eta=2 nu=1.0000: gapL=-2.911%
+[inertia] speed lam=0.25 theta=1 eta=5 nu=1.0000: gapL=-3.594%
+[inertia] scan main: 312 points
+[inertia] scan extreme: 48 points
+[inertia] unimodality: 144 points, 36 with a slice non-monotone in |u|
+[stage] research finished before the container restart (19:09:44 -> 19:57:43 UTC, 2879 s)
+[stage] validate start 20:05:13
+[inertia] control lam=0.25 eta=0.6: S exact=0.727515 S_B=0.727515
+[inertia] control lam=0.25 eta=2: S exact=0.620378 S_B=0.620378
+[inertia] control lam=0 eta=0: S exact=1.000000 S_B=1.000000
+[inertia] control lam=1 eta=0: S exact=0.500000 S_B=0.500000
+[inertia] control lam=1 eta=0.6: S exact=0.477275 S_B=0.477275
+[inertia] control lam=1 eta=2: S exact=0.437332 S_B=0.437332
+[inertia] control lam=0 eta=0.6: S exact=0.878338 S_B=0.878338
+[inertia] control lam=0 eta=2: S exact=0.716739 S_B=0.716739
+[inertia] control lam=0.25 eta=0: S exact=0.800000 S_B=0.800000
+[inertia] refinement V1 theta=0 R0 eta=0 nu=1
+[inertia]    V1 theta=0 R0 eta=0 nu=1 h=0.0125 Na_f=0 S_res=0.49998698
+[inertia]    V1 theta=0 R0 eta=0 nu=1 h=0.00625 Na_f=0 S_res=0.49999674
+[inertia]    V1 theta=0 R0 eta=0 nu=1 h=0.025 Na_f=0 S_res=0.49994791
+[inertia] refinement V2 theta=0 R0 eta=0.6
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.025 Na_f=200 S_res=0.47711354
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.025 Na_f=400 S_res=0.47716783
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.025 Na_f=800 S_res=0.47719492
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.0125 Na_f=800 S_res=0.47723498
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.025 Na_f=1600 S_res=0.47720846
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.0125 Na_f=200 S_res=0.47715359
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.0125 Na_f=400 S_res=0.47720788
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.00625 Na_f=400 S_res=0.47721790
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.0125 Na_f=1600 S_res=0.47724852
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.00625 Na_f=200 S_res=0.47716360
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.00625 Na_f=800 S_res=0.47724499
+[inertia]    V2 theta=0 R0 eta=0.6 h=0.00625 Na_f=1600 S_res=0.47725853
+[inertia] refinement V3 theta=0 R0 eta=2
+[inertia]    V3 theta=0 R0 eta=2 h=0.025 Na_f=200 S_res=0.43719166
+[inertia]    V3 theta=0 R0 eta=2 h=0.025 Na_f=400 S_res=0.43723515
+[inertia]    V3 theta=0 R0 eta=2 h=0.025 Na_f=800 S_res=0.43725650
+[inertia]    V3 theta=0 R0 eta=2 h=0.0125 Na_f=800 S_res=0.43729738
+[inertia]    V3 theta=0 R0 eta=2 h=0.025 Na_f=1600 S_res=0.43726708
+[inertia]    V3 theta=0 R0 eta=2 h=0.0125 Na_f=200 S_res=0.43723252
+[inertia]    V3 theta=0 R0 eta=2 h=0.0125 Na_f=400 S_res=0.43727603
+[inertia]    V3 theta=0 R0 eta=2 h=0.0125 Na_f=1600 S_res=0.43730796
+[inertia]    V3 theta=0 R0 eta=2 h=0.00625 Na_f=200 S_res=0.43724274
+[inertia]    V3 theta=0 R0 eta=2 h=0.00625 Na_f=400 S_res=0.43728625
+[inertia]    V3 theta=0 R0 eta=2 h=0.00625 Na_f=800 S_res=0.43730760
+[inertia]    V3 theta=0 R0 eta=2 h=0.00625 Na_f=1600 S_res=0.43731818
+[inertia] refinement V4 eta=0 theta=0.7 Rpl c=0.35 lam=1
+[inertia]    V4 eta=0 theta=0.7 Rpl c=0.35 lam=1 h=0.025 Na_f=0 S_res=0.64112023
+[inertia]    V4 eta=0 theta=0.7 Rpl c=0.35 lam=1 h=0.0125 Na_f=0 S_res=0.64117002
+[inertia]    V4 eta=0 theta=0.7 Rpl c=0.35 lam=1 h=0.00625 Na_f=0 S_res=0.64118246
+[inertia] refinement V5 eta=0 theta=0.7 Rpl c=0.35 lam=0
+[inertia]    V5 eta=0 theta=0.7 Rpl c=0.35 lam=0 h=0.025 Na_f=0 S_res=1.35639320
+[inertia]    V5 eta=0 theta=0.7 Rpl c=0.35 lam=0 h=0.0125 Na_f=0 S_res=1.35644912
+[inertia]    V5 eta=0 theta=0.7 Rpl c=0.35 lam=0 h=0.00625 Na_f=0 S_res=1.35646311
+[inertia] refinement V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.025 Na_f=200 S_res=0.68017929
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.025 Na_f=400 S_res=0.68028590
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.025 Na_f=800 S_res=0.68033913
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.0125 Na_f=800 S_res=0.68038373
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.025 Na_f=1600 S_res=0.68036573
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.0125 Na_f=200 S_res=0.68022389
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.0125 Na_f=400 S_res=0.68033049
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.0125 Na_f=1600 S_res=0.68041032
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.00625 Na_f=400 S_res=0.68034164
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.00625 Na_f=200 S_res=0.68023504
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.00625 Na_f=800 S_res=0.68039487
+[inertia]    V6 eta=0.6 theta=0.7 Rpl c=0.35 lam=1 h=0.00625 Na_f=1600 S_res=0.68042147
+[inertia] refinement BENCH R0 theta=0.7 eta=0.6 lam=1
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.025 Na_f=200 S_res=0.55369171
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.025 Na_f=400 S_res=0.55380158
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.025 Na_f=800 S_res=0.55385644
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.0125 Na_f=800 S_res=0.55389707
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.025 Na_f=1600 S_res=0.55388386
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.0125 Na_f=200 S_res=0.55373234
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.0125 Na_f=400 S_res=0.55384221
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.00625 Na_f=400 S_res=0.55385237
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.0125 Na_f=1600 S_res=0.55392449
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.00625 Na_f=200 S_res=0.55374250
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.00625 Na_f=800 S_res=0.55390723
+[inertia]    BENCH R0 theta=0.7 eta=0.6 lam=1 h=0.00625 Na_f=1600 S_res=0.55393465
+[inertia] done in 864s
+[stage] validate took 863s
+[stage] figures start 20:19:36
+[inertia] figures: episode done
+[inertia] figures: record done
+[inertia] stability eta=0: S=0.5000 Lbar=0.500 gap=2.000
+[inertia] stability eta=1: S=0.4715 Lbar=0.459 gap=2.461
+[inertia] stability eta=5: S=0.4161 Lbar=0.391 gap=3.409
+[inertia] stability eta=20: S=0.3521 Lbar=0.326 gap=4.375
+[inertia] figures: stability done
+[inertia] tipping: bifurcation done
+[inertia] tipping: shape (running economy) done
+[inertia] tipping: shape (lam = 0) done
+[inertia] done in 86s
+[stage] figures took 86s
+[stage] tables start 20:21:02
+[inertia] done in 0s
+[stage] tables took 0s
+[stage] extras --agents 50000 start 20:21:02
+[inertia] extras: stationary density (full)
+[inertia] extras: stationary density (capped)
+[inertia] extras: response field
+[inertia] extras: sample paths
+[inertia] extras: population simulations (down)
+[inertia] extras: population simulations (up)
+[inertia] done in 326s
+[stage] extras --agents 50000 took 327s
+RUN_EXIT 0

@@ -1,0 +1,71 @@
+\documentclass[tikz,border=1pt,11pt]{standalone}
+\input{style}
+\input{values}
+% Figure 2. One record, two economies (Theorem 2), in the running economy of Example 1.
+% B: completion driven by the hidden clock. P: its Markovian projection onto episode age and
+% the current assessment. Data: code/make_data.py (episode solver, code/solvers/c9core.py).
+\begin{document}
+\begin{tikzpicture}
+\begin{groupplot}[
+ group style={group size=2 by 2,horizontal sep=17mm,vertical sep=22mm},
+ width=5.95cm,height=3.45cm,scale only axis,
+]
+%% Panel A: completion intensity at age 1
+\nextgroupplot[
+ xmin=-3,xmax=3,ymin=0.6,ymax=5.1,
+ xtick={-2,-1.4,-0.7,0,0.7,1.4,2},xticklabels={$-2$,,,$0$,,,$2$},
+ ytick={1,2,3,4},yticklabels={$\nu$,2,3,4},
+ xlabel={Assessment $u$},ylabel={Completion intensity},
+ title style={font=\small\bfseries,text=ink,anchor=south west,at={(axis description cs:0,1.02)}},
+ title={A.\ \ What the clock hides (age $t=\RunTstar$)},
+ legend style={draw=none,fill=none,font=\footnotesize,at={(axis description cs:0.01,0.99)},anchor=north west,row sep=-1pt},
+ legend cell align=left,
+]
+\begin{pgfonlayer}{background}
+\fill[tolfill] (axis cs:-0.7,0.6) rectangle (axis cs:0.7,5.1);
+\end{pgfonlayer}
+\addplot[forget plot,fill=event,fill opacity=.20,draw=none] table[x=u,y=h,col sep=comma]{../../data/record_hazard_band.csv} -- cycle;
+\addplot[forget plot,event!80!black,line width=1.25pt] table[x=u,y=hbar,col sep=comma]{../../data/record_hazard.csv};
+\addlegendimage{event!80!black,line width=1.25pt}\addlegendentry{projection $\bar h(t,u)$}
+\addlegendimage{area legend,fill=event!20,draw=event!35,line width=.4pt}\addlegendentry{true $H(u,A)$, survivors, 10--90\%}
+\node[note,anchor=south] at (axis cs:0,1.08) {$H=\nu$};
+%% Panel B: durations
+\nextgroupplot[
+ xmin=0,xmax=6,ymin=0,ymax=1.05,
+ xlabel={Duration $\tau$},ylabel={Density},
+ ytick={0,0.5,1},
+ title style={font=\small\bfseries,text=ink,anchor=south west,at={(axis description cs:0,1.02)}},
+ title={B.\ \ Durations: identical},
+ legend style={draw=none,fill=none,font=\footnotesize,at={(axis description cs:0.98,0.98)},anchor=north east,row sep=-1pt},
+ legend cell align=left,
+]
+\addplot[assess,line width=1.25pt] table[x=t,y=durB,col sep=comma]{../../data/record_duration.csv};
+\addplot[event,only marks,mark=o,mark size=1.35pt,mark repeat=6,line width=.6pt] table[x=t,y=durP,col sep=comma]{../../data/record_duration.csv};
+\legend{economy $B$ (clock),projection $P$}
+%% Panel C: revisions
+\nextgroupplot[
+ xmin=-3.5,xmax=3.5,ymin=0,ymax=0.95,
+ xlabel={Revision $\Delta$},ylabel={Density},
+ ytick={0,0.4,0.8},
+ title style={font=\small\bfseries,text=ink,anchor=south west,at={(axis description cs:0,1.02)}},
+ title={C.\ \ Revisions: identical},
+]
+\addplot[assess,line width=1.25pt,restrict x to domain=-3.25:3.25] table[x=delta,y=revB,col sep=comma]{../../data/record_revision.csv};
+\addplot[event,only marks,mark=o,mark size=1.35pt,mark repeat=9,line width=.6pt,restrict x to domain=-3.25:3.25] table[x=delta,y=revP,col sep=comma]{../../data/record_revision.csv};
+\node[note,anchor=north east,align=right] at (axis description cs:0.99,0.98) {cross-sections of $U$\\[-1pt]also identical};
+%% Panel D: what differs
+\nextgroupplot[
+ xmin=0,xmax=6,ymin=0,ymax=2.5,
+ xlabel={Duration $\tau$},ylabel={$\mathbb E[I_\tau^2\mid\tau]$},
+ ytick={0,1,2},
+ title style={font=\small\bfseries,text=ink,anchor=south west,at={(axis description cs:0,1.02)}},
+ title={D.\ \ Area at completion: different},
+ legend style={draw=none,fill=none,font=\footnotesize,at={(axis description cs:0.02,0.98)},anchor=north west,row sep=-1pt},
+ legend cell align=left,
+]
+\addplot[assess,line width=1.25pt] table[x=t,y=areaB,col sep=comma]{../../data/record_duration.csv};
+\addplot[event,line width=1.25pt,densely dashed] table[x=t,y=areaP,col sep=comma]{../../data/record_duration.csv};
+\legend{economy $B$: $S_B=\RunSB$,projection $P$: $S_P=\RunSP$}
+\end{groupplot}
+\end{tikzpicture}
+\end{document}
