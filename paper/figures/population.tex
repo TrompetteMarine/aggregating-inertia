@@ -1,0 +1,88 @@
+\documentclass[tikz,border=1pt,11pt]{standalone}
+\input{style}
+\input{tipping_values}
+\input{extras_values}
+% Figure 6. Slow shift and tipping in a population of 50,000 agents: the two Markov hazards of Figure 5D,
+% with the social rule g c tanh(m/c) applied to the population's empirical average. Panels A-B: the gain
+% raised slowly from gS = 0.6 to 1.3 and lowered back; the stationary states of Figure 5D for reference.
+% Panels C-D: gains held fixed after a small common displacement; dotted: the stable stationary states.
+% Data: inertia extras (data/extras/hysteresis_*.csv, population_*.csv) and inertia figures (data/tip_branch_*.csv).
+\begin{document}
+\begin{tikzpicture}
+\pgfplotsset{
+ branch/.style={ink,line width=1.05pt},
+ branchun/.style={ink,line width=.85pt,dash pattern=on 3pt off 2pt},
+ rampup/.style={event,line width=.75pt,line join=round},
+ rampdown/.style={assess,line width=.75pt,line join=round},
+ gA/.style={assess!45,line width=.9pt},
+ gB/.style={assess,line width=.9pt},
+ gC/.style={event!65,line width=.9pt},
+ gD/.style={event!80!black,line width=.9pt},
+}
+\tikzset{level/.style={ink!70,line width=.5pt,densely dotted}}
+\begin{groupplot}[
+ group style={group size=2 by 2,horizontal sep=17mm,vertical sep=20.5mm},
+ width=6.05cm,height=3.0cm,scale only axis,
+ unbounded coords=jump,clip mode=individual,
+ title style={font=\small\bfseries,text=ink,anchor=south west,at={(axis description cs:0,1.03)}},
+]
+%% A. slow shift under the ramp
+\nextgroupplot[xmin=0.6,xmax=1.3,ymin=-0.08,ymax=0.86,clip=true,
+ xtick={0.6,0.8,1,1.2},ytick={0,0.25,0.5,0.75},
+ xlabel={Feedback relative to the threshold, $gS$},ylabel={Average assessment $m$},
+ title={A.\ \ Slow shift: hazard rising with $|u|$},
+ legend style={draw=none,fill=white,fill opacity=.85,text opacity=1,font=\footnotesize,at={(axis description cs:0.02,0.98)},anchor=north west,row sep=-1.5pt},
+ legend cell align=left]
+\draw[guide] (axis cs:1,-0.08)--(axis cs:1,0.86);
+\addplot[rampup] table[x=gS,y=m,col sep=comma,restrict expr to domain={\thisrow{t}}{0:300}]{../../data/extras/hysteresis_up.csv};
+\addplot[rampdown] table[x=gS,y=m,col sep=comma,restrict expr to domain={\thisrow{t}}{300:600}]{../../data/extras/hysteresis_up.csv};
+\addplot[branch] table[x=gS,y=m,col sep=comma]{../../data/tip_branch_up.csv};
+\addplot[branchun] coordinates {(1,0) (1.3,0)};
+\addplot[branch,forget plot] coordinates {(0.6,0) (1,0)};
+\legend{gain raised,gain lowered,stable states,unstable}
+%% B. tip and lock-in under the ramp
+\nextgroupplot[xmin=0.6,xmax=1.3,ymin=-0.25,ymax=3.75,clip=true,
+ xtick={0.6,0.8,1,1.2},ytick={0,1,2,3},
+ xlabel={Feedback relative to the threshold, $gS$},
+ title={B.\ \ Tip and lock-in: hazard falling with $|u|$}]
+\draw[guide] (axis cs:1,-0.25)--(axis cs:1,3.75);
+\addplot[rampup] table[x=gS,y=m,col sep=comma,restrict expr to domain={\thisrow{t}}{0:300}]{../../data/extras/hysteresis_down.csv};
+\addplot[rampdown] table[x=gS,y=m,col sep=comma,restrict expr to domain={\thisrow{t}}{300:600}]{../../data/extras/hysteresis_down.csv};
+\addplot[branch,restrict expr to domain={\thisrow{slope}}{-10:1}] table[x=gS,y=m,col sep=comma]{../../data/tip_branch_down.csv};
+\addplot[branchun,restrict expr to domain={\thisrow{slope}}{1:10}] table[x=gS,y=m,col sep=comma]{../../data/tip_branch_down.csv};
+\addplot[branch] coordinates {(0.6,0) (1,0)};
+\addplot[branchun] coordinates {(1,0) (1.3,0)};
+\filldraw[fill=white,draw=ink,line width=.6pt] (axis cs:\TipDownFold,\TipDownFoldM) circle (1.7pt);
+\node[note,anchor=east] at (axis cs:\TipDownFold-0.012,\TipDownFoldM+0.32) {fold};
+\node[font=\footnotesize,text=event,anchor=west] at (axis cs:\PopTipUp+0.012,1.2) {tip at $gS=\PopTipUp$};
+\node[font=\footnotesize,text=assess,anchor=east,align=right] at (axis cs:\PopDropDown-0.01,0.62) {back at\\ $gS=\PopDropDown$};
+\draw[<->,ink!75,line width=.55pt] (axis cs:\TipDownFold,3.35)--(axis cs:1,3.35);
+\node[note,anchor=south] at (axis cs:0.5*\TipDownFold+0.5,3.4) {lock-in};
+%% C. slow shift at fixed gains
+\nextgroupplot[xmin=0,xmax=60,ymin=-0.05,ymax=0.68,clip=true,
+ xtick={0,20,40,60},ytick={0,0.2,0.4,0.6},
+ xlabel={Time $t$},ylabel={Average assessment $m$},
+ title={C.\ \ Fixed gains: hazard rising with $|u|$}]
+\draw[level] (axis cs:0,\PopUpLevelA)--(axis cs:60,\PopUpLevelA);
+\draw[level] (axis cs:0,\PopUpLevelB)--(axis cs:60,\PopUpLevelB);
+\addplot[gA] table[x=t,y=gS0.8,col sep=comma]{../../data/extras/population_up.csv};
+\addplot[gB] table[x=t,y=gS0.95,col sep=comma]{../../data/extras/population_up.csv};
+\addplot[gC] table[x=t,y=gS1.05,col sep=comma]{../../data/extras/population_up.csv};
+\addplot[gD] table[x=t,y=gS1.2,col sep=comma]{../../data/extras/population_up.csv};
+%% D. tip at fixed gains
+\nextgroupplot[xmin=0,xmax=60,ymin=-0.2,ymax=3.45,clip=true,
+ xtick={0,20,40,60},ytick={0,1,2,3},
+ xlabel={Time $t$},
+ title={D.\ \ Fixed gains: hazard falling with $|u|$},
+ legend style={draw=none,fill=white,fill opacity=.85,text opacity=1,font=\footnotesize,at={(axis description cs:0.98,0.5)},anchor=east,row sep=-1.5pt},
+ legend cell align=left]
+\draw[level] (axis cs:0,\PopDownLevelA)--(axis cs:60,\PopDownLevelA);
+\draw[level] (axis cs:0,\PopDownLevelB)--(axis cs:60,\PopDownLevelB);
+\addplot[gA] table[x=t,y=gS0.8,col sep=comma]{../../data/extras/population_down.csv};
+\addplot[gB] table[x=t,y=gS0.95,col sep=comma]{../../data/extras/population_down.csv};
+\addplot[gC] table[x=t,y=gS1.05,col sep=comma]{../../data/extras/population_down.csv};
+\addplot[gD] table[x=t,y=gS1.2,col sep=comma]{../../data/extras/population_down.csv};
+\legend{$gS=0.8$,$gS=0.95$,$gS=1.05$,$gS=1.2$}
+\end{groupplot}
+\end{tikzpicture}
+\end{document}

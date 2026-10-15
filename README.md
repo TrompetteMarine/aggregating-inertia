@@ -34,7 +34,7 @@ Natively (tested with Rust 1.95 and Julia 1.12):
 make engine         # cargo build --release
 make data           # every computation -> output/   (about 70 minutes on two cores)
 make figures        # the Julia figures -> figures/light, figures/dark   (PDF and PNG)
-make paper-figures  # the paper's six figures as printed -> figures/paper   (needs pdflatex with PGFPlots)
+make paper-figures  # the paper's eight figures as printed -> figures/paper   (needs pdflatex with PGFPlots, numpy)
 make check          # compare output/ with the reference pipeline's results
 ```
 
@@ -47,17 +47,19 @@ Stages can be run separately: `inertia research grid`, `inertia validate mc`, `i
 |---|---|---|
 | Figure 1 (one episode under a pausing clock) | `pipeline::figures::episode` | `data/episode_*.csv` |
 | Figures 2 and 3 (an episode with resets; killing and reinjection) | none: schematics drawn by hand in TikZ | `paper/figures/trajectory.tex`, `reinjection.tex` |
-| Figure 4 (kernels, Nyquist curves, dominant roots, bifurcation diagrams) | `stationary`, `ghf`, `pipeline::figures::{stability, tipping}` | `data/stab_*.csv`, `data/tip_*.csv` |
-| Figure 5 (one record, two economies) | `episode` (economy B and its Markovian projection P) | `data/record_*.csv` |
-| Figure 6 and Section 5 (what the record misses: location, speed, kurtosis statistic) | `episode::run::full_point`, `episode::speed` | `data/grid/grid_lam*.json`, `variant_*.json`, `speed_grid.json` |
+| Figure 4 (consensus in the running economy: the stationary law of assessment and processing, the response to a push) | `stationary`, `pipeline::extras::{stationary_density, response_field}` | `data/extras/stationary_*.csv`, `response_field.csv` |
+| Figure 5 (kernels, Nyquist curves, dominant roots, bifurcation diagrams) | `stationary`, `ghf`, `pipeline::figures::{stability, tipping}` | `data/stab_*.csv`, `data/tip_*.csv` |
+| Figure 6 (50,000 agents through a slow shift and a tip) | `pipeline::extras::tipping_simulations` | `data/extras/hysteresis_*.csv`, `population_*.csv` |
+| Figure 7 (one record, two economies) | `episode` (economy B and its Markovian projection P) | `data/record_*.csv` |
+| Figure 8 and Section 5 (what the record misses: location, speed, kurtosis statistic) | `episode::run::full_point`, `episode::speed` | `data/grid/grid_lam*.json`, `variant_*.json`, `speed_grid.json` |
 | Conjecture 1 evidence (360 economies, unimodality) | `pipeline::research::{scans, unimodality}` | `data/grid/scan_*.jsonl`, `unimodality.json` |
 | Supplement S1.4 (validation of both solvers, Monte Carlo) | `pipeline::validation`, `mc` | `data/validation/*.json` |
 | Table S1.1 | `pipeline::tables` | `tex/variants.tex` |
-| Every number quoted in the text | `pipeline::{figures, tables}` | `tex/values.tex`, `tex/tipping_values.tex`, `tex/validation_values.tex` |
+| Every number quoted in the text | `pipeline::{figures, tables, extras}` | `tex/values.tex`, `tex/tipping_values.tex`, `tex/validation_values.tex`, `tex/extras_values.tex` |
 
-`make paper-figures` compiles the paper's figure sources (`paper/figures`, unchanged) against `output/`.
+`make paper-figures` compiles the paper's figure sources (`paper/figures`) against `output/`; `paper/figures/rasters.py` paints the two heatmaps of Figure 4 from the data.
 
-The engine has three solvers and a Monte Carlo module:
+The engine has three solvers, a Monte Carlo module and agent-based simulations:
 
 - **Episode solver** (`rust/src/episode`): one reassessment episode of the true economy, with the processing clock
   on an (assessment, processing) grid, by finite volumes and backward Euler (a block-triangular sweep), and of its Markovian projection
@@ -71,6 +73,8 @@ The engine has three solvers and a Monte Carlo module:
   hysteresis.
 - **Monte Carlo** (`rust/src/mc`): the episode benchmark with the generator and the per-path streams of the
   reference C code, the coupled simulation of the kernel, the fluctuation–response identity and the perturbation formula.
+- **Populations** (`pipeline::extras`): agent-based simulations of 50,000 agents whose push is the social rule
+  evaluated at their average, under a slow ramp of the gain and at fixed gains.
 
 ## How it was checked
 
@@ -91,15 +95,19 @@ compared at every level:
   zero without pull, to 2·10⁻¹¹ in absolute terms); the solver controls and refinements to 10⁻¹¹; the unimodality
   classification agrees at all 144 points; the record identity holds to 2·10⁻¹⁴; the Monte Carlo benchmark
   agrees digit for digit. Figure data and macros are as in the previous item, apart from the four Monte Carlo
-  macros described below. Rebuilt from these outputs by `make paper-figures`, the paper's six figures are identical
-  to the printed ones, pixel for pixel at 100 dpi.
+  macros described below. Rebuilt from these outputs by `make paper-figures`, the paper's figures are identical to
+  the printed ones, pixel for pixel at 100 dpi.
+- **Populations** (`tests_ref/check_population.py`, about eight minutes): an independent numpy implementation of the
+  simulation settles, at the engine's time step, where the engine does (within sampling error), and shows that the
+  gap between the settled averages and the stationary states of the continuous-time model, at most 4.0% at the
+  engine's step, is the bias of the time step: it falls to 0.6% at a quarter of the step.
 
 Monte Carlo checks that used numpy's generator in the reference (the kernel, the fluctuation–response identity and
 the perturbation formula) use per-path xoshiro256** streams here, so they agree with the reference within Monte Carlo
 error rather than digit for digit. Against the perturbation formula's 0.0369, the simulation gives 0.0347 ± 0.0026
 here and 0.0377 ± 0.0025 in the paper; against the exact 0.4988 of the fluctuation–response identity, 0.4982 ± 0.0019
 here and 0.4970 ± 0.0019 in the paper; the largest root-mean-square standardised deviation of the Monte Carlo kernels
-from the solver's is 2.2 here and 1.9 in the paper. The horizontal jitter of Figure 6 uses a port of numpy's
+from the solver's is 2.2 here and 1.9 in the paper. The horizontal jitter of Figure 8 uses a port of numpy's
 `default_rng`, so it is reproduced exactly.
 
 One reference diagnostic that the paper does not use (the Monte Carlo against PDE comparison of duration histograms)
@@ -123,9 +131,9 @@ engine splits each step's mass between the bins it overlaps.
 | `09_lumpy_revisions` | sample agents with their completions |
 | `10_population_dynamics` | the average assessment of 50,000 agents near the tipping point |
 
-Figures 02, 03, 06, 07 and 08 redraw the paper's Figures 4 (panels A–C), 5, 6 and 1, and the stationary branches of
-Figure 01 its Figure 4D. Figures 04, 05, 09 and 10 and the simulated populations of Figure 01 are illustrations
-computed for this repository; they are not in the paper.
+These are restyled versions of the paper's computed figures: 01 and 10 of its Figure 6 (with the branches of
+Figure 5D), 02 and 03 of Figure 5 (panels A–C), 04 and 05 of Figure 4, 06 of Figure 7, 07 of Figure 8 and 08 of
+Figure 1. Figure 04 adds the capped reset, and Figure 09 (sample agents) is not in the paper.
 
 ## Layout
 
@@ -133,7 +141,7 @@ computed for this repository; they are not in the paper.
 rust/        the engine (library and the `inertia` command)
 julia/       the figures (Makie), with the Inter typeface (SIL Open Font License)
 output/      results computed by the engine: data/, data/grid/, data/validation/, data/extras/, tex/
-figures/     the figures, light and dark, PDF and PNG; figures/paper: the paper's six figures
+figures/     the figures, light and dark, PDF and PNG; figures/paper: the paper's eight figures
 paper/       the TikZ and PGFPlots sources of the paper's figures
 reference/   the paper's Python and C pipeline and its results
 tests_ref/   comparisons between the engine and the reference

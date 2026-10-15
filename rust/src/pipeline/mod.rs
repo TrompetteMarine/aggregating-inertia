@@ -8,7 +8,8 @@
 //!    Theorem 3) and the Monte Carlo checks;
 //! 3. [`figures`]: the data files of the figures and the quoted numbers (`make_data.py`);
 //! 4. [`tables`]: Table S1.1 and the validation numbers (`make_tables.py`);
-//! 5. [`extras`]: additional data for the showcase plots of the repository.
+//! 5. [`extras`]: the stationary law and the population simulations of the paper's Figures 4 and 6, and
+//!    data for the showcase plots of the repository.
 //!
 //! Every stage reads only what earlier stages wrote, so stages can be rerun separately.
 

@@ -45,10 +45,13 @@ enum Cmd {
     Figures,
     /// Table S1.1 and validation_values.tex (needs research and validation)
     Tables,
-    /// Data for the showcase plots
+    /// Data for the showcase plots and the paper's simulation figures, and tex/extras_values.tex
     Extras {
         #[arg(long, default_value_t = 50_000)]
         agents: usize,
+        /// Only rewrite tex/extras_values.tex from the extras already in the output folder
+        #[arg(long)]
+        values_only: bool,
     },
 }
 
@@ -125,7 +128,13 @@ fn main() -> Result<()> {
         Cmd::Validate { which, paths, particles } => validation_stage(&p, &which, paths, particles)?,
         Cmd::Figures => figures::run_all(&p)?,
         Cmd::Tables => tables::run_all(&p)?,
-        Cmd::Extras { agents } => extras::run_all(&p, agents)?,
+        Cmd::Extras { agents, values_only } => {
+            if values_only {
+                extras::values(&p)?
+            } else {
+                extras::run_all(&p, agents)?
+            }
+        }
     }
     pipeline::log(&format!("done in {:.0}s", t0.elapsed().as_secs_f64()));
     Ok(())

@@ -1,0 +1,56 @@
+\documentclass[tikz,border=1pt,11pt]{standalone}
+\input{style}
+\input{values}
+\input{extras_values}
+\input{raster_values}
+% Figure 4. Consensus in the running economy (Example 1: full resets, theta = 0.7, eta = 5, lambda = nu =
+% gamma = 1). Panel A: the stationary joint density of the assessment U and processing A, without the
+% agents with A = 0, on a logarithmic colour scale. Panel B: the change in the density of assessments after
+% a unit common push at t = 0, whose mean is the response kernel k(t) (bottom). Stationary solver.
+% Data: inertia extras (data/extras/stationary_joint_full.csv, response_field.csv) and inertia figures
+% (data/stab_kernels.csv); the two images are painted by rasters.py, which also writes raster_values.tex.
+\begin{document}
+\begin{tikzpicture}
+\pgfplotsset{
+ heat/.style={scale only axis,enlargelimits=false,axis on top,axis lines=box,
+  axis line style={rule,line width=.5pt},tick align=outside,colorbar/width=2mm,
+  colorbar style={axis lines=box,axis line style={rule,line width=.4pt},tick style={rule,line width=.4pt},
+   major tick length=1.6pt,tick label style={font=\footnotesize,text=ink},ylabel style={font=\small,text=ink},
+   title style={font=\footnotesize,text=ink,inner sep=2pt}}},
+}
+\tikzset{band/.style={rule,line width=.5pt,dash pattern=on 2pt off 1.6pt}}
+%% A. the stationary law of assessment and processing
+\begin{axis}[heat,name=dens,at={(0,0)},anchor=south west,width=4.55cm,height=4.4cm,
+ xmin=\ConsUmin,xmax=\ConsUmax,ymin=0,ymax=2.2,xtick={-3,-2,-1,0,1,2,3},ytick={0,0.5,1,1.5,2},
+ xlabel={Assessment $U$},ylabel={Processing $A$},
+ title={A.\ \ Who carries processing},
+ title style={font=\small\bfseries,text=ink,anchor=south west,at={(axis description cs:0,1.03)}},
+ colormap name=consdensity,point meta min=\ConsLogLo,point meta max=\ConsLogHi,colorbar,
+ colorbar style={ytick={-4,-2,0},yticklabels={$10^{-4}$,$10^{-2}$,$1$},title={Density},at={(1.05,0)},anchor=south west}]
+\addplot graphics[xmin=\ConsUmin,xmax=\ConsUmax,ymin=0,ymax=2.2,includegraphics={interpolate=true}]{consensus_density.png};
+\draw[band] (axis cs:-\RunTheta,0)--(axis cs:-\RunTheta,1.72);
+\draw[band] (axis cs:\RunTheta,0)--(axis cs:\RunTheta,1.72);
+\node[note,anchor=south,align=center] at (axis cs:0,1.8) {$|U|\le\theta$: processing pauses};
+\end{axis}
+%% B. the response to a unit push, and its mean k(t)
+\begin{axis}[heat,name=resp,at={(7.55cm,1.2cm)},anchor=south west,width=5.0cm,height=3.2cm,
+ xmin=0,xmax=3,ymin=\ConsVmin,ymax=\ConsVmax,xtick={0,1,2,3},xticklabels={},ytick={-2,0,2},
+ ylabel={Assessment $U$},
+ title={B.\ \ A unit push at $t=0$ travels and fades},
+ title style={font=\small\bfseries,text=ink,anchor=south west,at={(axis description cs:0,1.03)}},
+ colormap name=consresponse,point meta min=-\ConsRespLim,point meta max=\ConsRespLim,colorbar,
+ colorbar style={ytick={-0.3,0,0.3},yticklabels={$-0.3$,$0$,$0.3$},ylabel={Change in density},at={(1.05,0)},anchor=south west}]
+\addplot graphics[xmin=0,xmax=3,ymin=\ConsVmin,ymax=\ConsVmax,includegraphics={interpolate=true}]{consensus_response.png};
+\draw[guide] (axis cs:0,\RunTheta)--(axis cs:3,\RunTheta);
+\draw[guide] (axis cs:0,-\RunTheta)--(axis cs:3,-\RunTheta);
+\node[note,anchor=north east,align=right] at (axis cs:2.95,2.85) {mass moves from $U<0$ to $U>0$};
+\end{axis}
+\begin{axis}[name=kern,at={(resp.south west)},anchor=north west,yshift=-2.5mm,width=5.0cm,height=0.95cm,scale only axis,
+ xmin=0,xmax=3,ymin=0,ymax=1.08,xtick={0,1,2,3},ytick={0,1},
+ xlabel={Time since the push, $t$},ylabel={$k(t)$}]
+\addplot[draw=none,fill=assess!14,restrict x to domain=0:3] table[x=t,y=k5,col sep=comma]{../../data/stab_kernels.csv} \closedcycle;
+\addplot[assess,line width=1.05pt,restrict x to domain=0:3] table[x=t,y=k5,col sep=comma]{../../data/stab_kernels.csv};
+\node[note,anchor=north east] at (axis cs:2.95,1.02) {mean of the change: the kernel};
+\end{axis}
+\end{tikzpicture}
+\end{document}

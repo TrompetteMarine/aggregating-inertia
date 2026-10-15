@@ -6,7 +6,8 @@
 #   make test       unit tests of the engine
 #   make check      compare output/ with the reference pipeline's outputs in reference/
 #   make crosscheck run the reference Python + C solvers and the Rust engine side by side (needs numpy, scipy, gcc)
-#   make paper-figures  the six figures of the paper as printed, from output/ -> figures/paper/ (needs pdflatex, pgfplots)
+#   make paper-figures  the eight figures of the paper as printed, from output/ -> figures/paper/ (needs pdflatex,
+#                   pgfplots and numpy)
 ENGINE ?= rust/target/release/inertia
 JULIA ?= julia
 PYTHON ?= python3
@@ -40,12 +41,14 @@ crosscheck: engine
 	$(PYTHON) tests_ref/compare_mc.py reference/code/solvers rust
 
 # The paper's figure sources read ../../data/*.csv and the macros in values.tex: compile them in a copy of the
-# paper's layout, with data/ pointing at $(OUT)/data. Figures 2 and 3 are schematics (no data).
-PAPER_FIGS = episode trajectory reinjection stability record magnitudes
+# paper's layout, with data/ pointing at $(OUT)/data. Figures 2 and 3 are schematics (no data); the two
+# heatmaps of Figure 4 are painted by rasters.py (numpy), which also writes their colour maps and ranges.
+PAPER_FIGS = episode trajectory reinjection consensus stability population record magnitudes
 paper-figures:
 	rm -rf build/paper && mkdir -p build/paper/figures/tikz figures/paper
-	cp paper/figures/*.tex $(OUT)/tex/values.tex $(OUT)/tex/tipping_values.tex build/paper/figures/tikz/
+	cp paper/figures/*.tex $(OUT)/tex/values.tex $(OUT)/tex/tipping_values.tex $(OUT)/tex/extras_values.tex build/paper/figures/tikz/
 	ln -s "$(abspath $(OUT))/data" build/paper/data
+	$(PYTHON) paper/figures/rasters.py $(OUT)/data build/paper/figures/tikz
 	cd build/paper/figures/tikz && for f in $(PAPER_FIGS); do \
 	  pdflatex -interaction=nonstopmode -halt-on-error $$f.tex > $$f.build.log || { tail -n 20 $$f.build.log; exit 1; }; \
 	done
