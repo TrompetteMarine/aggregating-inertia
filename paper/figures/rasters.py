@@ -73,9 +73,9 @@ def grid(path, xname, yname, zname):
 
 
 def density_image(data, out, amax=2.2, na=440):
-    """The stationary joint density of (U, A) without the first processing cell, which holds the agents
-    with A = 0 exactly, interpolated linearly in its logarithm onto an even grid in A, on a logarithmic
-    colour scale; returns the range of log10 densities that the colours span."""
+    """The stationary joint density of (U, A) from the second processing cell on (the first, [0, 0.003),
+    holds the agents with no processing and a layer with very little), interpolated linearly in its logarithm
+    onto an even grid in A, on a logarithmic colour scale; returns the range of log10 densities shown."""
     us, a_s, z = grid(os.path.join(data, "extras", "stationary_joint_full.csv"), "u", "a", "density")
     a_s, z = a_s[1:], z[:, 1:]
     lz = np.log10(np.maximum(z, 1e-300))

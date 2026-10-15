@@ -1,6 +1,9 @@
 {
-  "atom_share": 0.5998237056321655,
+  "completion_rate": 1.0613402278453345,
+  "first_cell_share": 0.5998237056321655,
   "first_cell_width": 0.002906192595285851,
+  "no_processing_share": null,
   "reset": "pl",
+  "share_below_0.1": 0.8486416593216836,
   "theta": 0.7
 }

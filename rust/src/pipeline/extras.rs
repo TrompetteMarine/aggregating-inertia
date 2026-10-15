@@ -11,7 +11,33 @@ use anyhow::{Context, Result};
 use rayon::prelude::*;
 use serde_json::json;
 
-/// Joint stationary density on (u, a) and its u-marginal, for full and capped resets.
+/// The share of agents with no processing at consensus under full resets, exactly. An episode starts at the
+/// reference with no processing, which stays zero until the assessment first leaves the tolerance band or the
+/// episode ends; inside the band the hazard is nu. By renewal-reward the share is F (1 - E[exp(-nu T)]) / nu,
+/// with T the exit time of the Ornstein-Uhlenbeck process from (-theta, theta) started at zero and F the
+/// completion rate; phi(u) = E_u[exp(-nu T)] solves (sigma^2/2) phi'' - lam u phi' - nu phi = 0 on the band,
+/// with phi = 1 at its edges, here by central differences on 4001 interior nodes (the centre is a node).
+pub fn no_processing_share(prm: &Params, completion_rate: f64) -> f64 {
+    let n = 4001usize;
+    let h = 2.0 * prm.theta / (n + 1) as f64;
+    let s2 = 0.5 * prm.sig * prm.sig / (h * h);
+    let (mut a, mut b, mut c, mut d) = (vec![0.0; n], vec![0.0; n], vec![0.0; n], vec![0.0; n]);
+    for i in 0..n {
+        let u = -prm.theta + (i + 1) as f64 * h;
+        a[i] = s2 + prm.lam * u / (2.0 * h);
+        b[i] = -2.0 * s2 - prm.nu;
+        c[i] = s2 - prm.lam * u / (2.0 * h);
+    }
+    d[0] -= a[0];
+    d[n - 1] -= c[n - 1];
+    let phi = crate::util::linalg::thomas(&a, &b, &c, &d);
+    completion_rate * (1.0 - phi[(n - 1) / 2]) / prm.nu
+}
+
+/// Joint stationary density on (u, a) and its u-marginal, for full and capped resets. The solver's first
+/// processing cell, [0, 0.003), holds the agents with no processing together with a layer of agents with very
+/// little: just outside the band processing advances very slowly, because the activation rises from zero with
+/// all its derivatives. The joint density is written from the second cell on, the first cell separately.
 pub fn stationary_density(p: &Paths) -> Result<()> {
     for (tag, reset) in [("full", ResetKind::Zero), ("capped", ResetKind::Pl)] {
         let prm = Params::new(figures::THETA, figures::ETA, figures::NU, figures::LAM, figures::GAM, reset);
@@ -33,13 +59,28 @@ pub fn stationary_density(p: &Paths) -> Result<()> {
             }
         }
         write_csv_sig(&p.extras().join(format!("stationary_joint_{tag}.csv")), "u,a,density", &[&uu, &aa, &dens], 9)?;
-        // the first processing cell holds the agents that have not left the tolerance band since their
-        // last revision (processing exactly zero): an atom at a = 0, reported separately
-        let atom: Vec<f64> = (0..n).map(|i| m.pi[i] / d.du[i]).collect();
-        write_csv_sig(&p.extras().join(format!("stationary_atom_{tag}.csv")), "u,density", &[&d.uc, &atom], 9)?;
-        let share: f64 = m.pi[..n].iter().sum();
+        let first: Vec<f64> = (0..n).map(|i| m.pi[i] / d.du[i]).collect();
+        write_csv_sig(&p.extras().join(format!("stationary_first_cell_{tag}.csv")), "u,density", &[&d.uc, &first], 9)?;
+        // shares of processing: in the first cell, below 0.1 (linear within the cell that contains it), and,
+        // under full resets, exactly zero
+        let cell: Vec<f64> = (0..na).map(|j| m.pi[j * n..(j + 1) * n].iter().sum()).collect();
+        let below = |x: f64| -> f64 {
+            let mut acc = 0.0;
+            for j in 0..na {
+                if d.af[j + 1] <= x {
+                    acc += cell[j];
+                } else {
+                    acc += cell[j] * ((x - d.af[j]) / (d.af[j + 1] - d.af[j])).clamp(0.0, 1.0);
+                    break;
+                }
+            }
+            acc
+        };
+        let rate: f64 = (0..na * n).map(|k| d.h[k] * m.pi[k]).sum();
+        let none = if matches!(reset, ResetKind::Zero) { json!(no_processing_share(&prm, rate)) } else { json!(null) };
         write_json(&p.extras().join(format!("stationary_meta_{tag}.json")),
-                   &json!({"atom_share": share, "theta": figures::THETA, "first_cell_width": d.da[0], "reset": reset.code()}))?;
+                   &json!({"first_cell_share": cell[0], "first_cell_width": d.da[0], "share_below_0.1": below(0.1),
+                           "no_processing_share": none, "completion_rate": rate, "theta": figures::THETA, "reset": reset.code()}))?;
         let marg: Vec<f64> = (0..n).map(|i| (0..na).map(|j| m.pi[j * n + i]).sum::<f64>() / d.du[i]).collect();
         let hz: Vec<f64> = (0..n).map(|i| (0..na).map(|j| d.h[j * n + i] * m.pi[j * n + i]).sum::<f64>() / d.du[i]).collect();
         write_csv_sig(&p.extras().join(format!("stationary_marginal_{tag}.csv")), "u,density,completion_rate", &[&d.uc, &marg, &hz], 9)?;
@@ -343,7 +384,8 @@ pub fn values(p: &Paths) -> Result<()> {
     }
     push("PopLevelGap", format!("{:.0}", (100.0 * gap).ceil()));
     let st = read_json(&p.extras().join("stationary_meta_full.json"))?;
-    push("HidAtomShare", format!("{:.0}", 100.0 * f(&st, "atom_share")));
+    push("HidNoneShare", format!("{:.0}", 100.0 * f(&st, "no_processing_share")));
+    push("HidFirstCell", format!("{:.3}", f(&st, "first_cell_width")));
     let mut text = String::from("% Generated by inertia extras (agent-based simulations and the running economy's stationary law); do not edit.\n");
     for (k, s) in &v {
         text.push_str(&format!("\\def\\{k}{{{s}}}\n"));
@@ -360,4 +402,19 @@ pub fn run_all(p: &Paths, n_agents: usize) -> Result<()> {
     tipping_simulations(p, n_agents)?;
     values(p)?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// The share of agents with no processing in the running economy, against an independent solution of the
+    /// same boundary-value problem (scipy's banded solver on 16,000 nodes gives 0.40882819) with the episode
+    /// solver's completion rate F = 1.0553847428665462.
+    #[test]
+    fn no_processing_share_running_economy() {
+        let prm = Params::new(figures::THETA, figures::ETA, figures::NU, figures::LAM, figures::GAM, ResetKind::Zero);
+        let share = no_processing_share(&prm, 1.0553847428665462);
+        assert!((share - 0.40882819).abs() < 1e-6, "{share}");
+    }
 }

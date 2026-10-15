@@ -23,6 +23,7 @@ people revise can and cannot reveal. This repository computes all of it.
 With Docker (nothing else needed):
 
 ```sh
+git clone https://github.com/TrompetteMarine/aggregating-inertia && cd aggregating-inertia
 docker build -t aggregating-inertia .
 docker run --rm -v "$PWD/figures:/work/figures" aggregating-inertia figures            # figures from the stored results (minutes)
 docker run --rm -v "$PWD/output:/work/output" -v "$PWD/figures:/work/figures" aggregating-inertia   # everything from scratch
@@ -101,6 +102,9 @@ compared at every level:
   simulation settles, at the engine's time step, where the engine does (within sampling error), and shows that the
   gap between the settled averages and the stationary states of the continuous-time model, at most 4.0% at the
   engine's step, is the bias of the time step: it falls to 0.6% at a quarter of the step.
+- **Processing** (`tests_ref/check_processing.py`, about two minutes): the share of agents with no processing in
+  the running economy, which the engine computes exactly (41%), against a simulation of 50,000 agents that draws
+  band exits between time steps from the Brownian-bridge crossing probability (41.1% ± 0.2% in our run).
 
 Monte Carlo checks that used numpy's generator in the reference (the kernel, the fluctuation–response identity and
 the perturbation formula) use per-path xoshiro256** streams here, so they agree with the reference within Monte Carlo

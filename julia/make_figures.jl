@@ -18,6 +18,8 @@ const REC = readjson(D("records.json"))
 "Agents in the population simulations (the same for both hazards)."
 const AGENTS = thousands(Int(only(unique(v["agents"] for v in values(readjson(D("extras", "population_meta.json")))))))
 const THETA = 0.7
+"Upper edge of the solver's first processing cell, as printed in the figures."
+const FIRST = string(round(readjson(D("extras", "stationary_meta_full.json"))["first_cell_width"]; digits = 3))
 const ETAS = ["0", "1", "5", "20"]
 const ETALAB = ["η = 0 (Calvo)", "η = 1", "η = 5", "η = 20"]
 
@@ -203,10 +205,10 @@ function regrid_rows(ts, Z, tg)
     out
 end
 
-"Joint density without the first processing cell, which holds the agents with A = 0 exactly,
-interpolated (linearly in the logarithm of the density) from the solver's stretched processing grid
-onto a regular grid for display."
-function joint_without_atom(tag; amax = 2.2, na = 360)
+"Joint density from the second processing cell on (the first, [0, 0.003), holds the agents with no processing
+and a layer with very little), interpolated linearly in the logarithm of the density from the solver's
+stretched processing grid onto a regular grid for display."
+function joint_from_second_cell(tag; amax = 2.2, na = 360)
     j = readcsv(D("extras", "stationary_joint_$tag.csv"))
     amin = minimum(j["a"])
     keep = j["a"] .> amin
@@ -231,14 +233,17 @@ end
 function fig_stationary(p::Palette)
     fig = Figure(size = (560, 320), figure_padding = (6, 10, 4, 4))
     hm = nothing
-    data = Dict(tag => joint_without_atom(tag) for tag in ("full", "capped"))
+    data = Dict(tag => joint_from_second_cell(tag) for tag in ("full", "capped"))
     zmax = maximum(maximum(filter(isfinite, data[t][3])) for t in keys(data))
     for (k, (tag, title)) in enumerate((("full", "Full reset"), ("capped", "Capped reset")))
         us, as, Z = data[tag]
         m = readcsv(D("extras", "stationary_marginal_$tag.csv"))
-        at = readcsv(D("extras", "stationary_atom_$tag.csv"))
-        share = readjson(D("extras", "stationary_meta_$tag.json"))["atom_share"]
-        axm = Axis(fig[1, k]; height = 58, title = title, subtitle = "A = 0 (dashed): $(round(Int, 100share))% of agents",
+        at = readcsv(D("extras", "stationary_first_cell_$tag.csv"))
+        meta = readjson(D("extras", "stationary_meta_$tag.json"))
+        # the exact share with no processing is computed for the full reset only (see extras::no_processing_share)
+        sub = meta["no_processing_share"] === nothing ? "dotted: after a completion, |u| ≤ θ/2" :
+              "$(round(Int, 100meta["no_processing_share"]))% of agents carry no processing (A = 0)"
+        axm = Axis(fig[1, k]; height = 58, title = title, subtitle = sub,
                    subtitlecolor = p.muted, subtitlesize = 8.5, xticklabelsvisible = false, yticklabelsvisible = false,
                    yticksvisible = false, leftspinevisible = false)
         sel = abs.(m["u"]) .<= 3
@@ -258,7 +263,6 @@ function fig_stationary(p::Palette)
             for s in (-THETA / 2, THETA / 2)
                 vlines!(ax, [s]; color = (p.event, 0.9), linewidth = 0.9, linestyle = :dot)
             end
-            text!(ax, 0.0, 2.15; text = "reset to ±θ/2", align = (:center, :top), color = p.event, fontsize = 8)
         end
         text!(ax, 2.9, 2.15; text = "|u| > θ:\nprocessing\naccumulates", align = (:right, :top), color = p.muted, fontsize = 8)
         xlims!(ax, -3, 3)
@@ -266,9 +270,9 @@ function fig_stationary(p::Palette)
         linkxaxes!(ax, axm)
         k == 2 && (ax.yticklabelsvisible = false)
     end
-    Colorbar(fig[2, 3], hm; label = "density of agents with A > 0", width = 8, ticklabelsize = 8)
+    Colorbar(fig[2, 3], hm; label = "density of agents with A ≥ $(FIRST)", width = 8, ticklabelsize = 8)
     Legend(fig[1, 3], [PolyElement(color = (p.assess, 0.4)), LineElement(color = p.ink, linestyle = (:dash, :dense)),
-                       LineElement(color = p.event)], ["all agents", "A = 0", "completions"];
+                       LineElement(color = p.event)], ["all agents", "A < $(FIRST)", "completions"];
            labelsize = 8, tellwidth = true, valign = :center, patchsize = (12, 6))
     rowgap!(fig.layout, 4)
     colgap!(fig.layout, 10)
@@ -494,12 +498,12 @@ function fig_hero(p::Palette)
     end
     xlims!(ax2, 0.6, 1.4)
     axislegend(ax2; position = :lt, labelsize = 9)
-    # stationary law (agents with A > 0; the atom at A = 0 is reported in the subtitle)
-    us, as, Z = joint_without_atom("full")
-    share = readjson(D("extras", "stationary_meta_full.json"))["atom_share"]
+    # stationary law (from the second processing cell on; the agents with no processing are counted in the subtitle)
+    us, as, Z = joint_from_second_cell("full")
+    share = readjson(D("extras", "stationary_meta_full.json"))["no_processing_share"]
     zmax = maximum(filter(isfinite, Z))
     ax3 = Axis(g3[1, 1]; xlabel = "assessment  u", ylabel = "processing  a", title = "The hidden state",
-               subtitle = "joint law of assessment and processing; $(round(Int, 100share))% of agents sit at A = 0", subtitlecolor = p.muted, subtitlesize = 10)
+               subtitle = "joint law of assessment and processing, A ≥ $(FIRST); $(round(Int, 100share))% of agents carry none", subtitlecolor = p.muted, subtitlesize = 10)
     hm = heatmap!(ax3, us, as, Z; colormap = seqfade(p), colorscale = log10, colorrange = (zmax * 1e-6, zmax), lowclip = (p.bg, 1.0),
                   interpolate = true)
     for s in (-THETA, THETA)
