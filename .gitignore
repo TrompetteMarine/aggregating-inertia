@@ -4,3 +4,5 @@ build/
 reference/code/solvers/*.so
 *.log
 !output/run_all.log
+lean/.lake/
+lean/axioms.txt

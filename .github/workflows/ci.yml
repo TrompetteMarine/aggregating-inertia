@@ -53,6 +53,23 @@ jobs:
           name: figures
           path: ci-figures
 
+  lean:
+    name: Lean formalisation (Mathlib)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: lean
+          use-mathlib-cache: true
+      - name: No sorry, standard axioms only
+        working-directory: lean
+        run: |
+          if grep -rnw -e sorry -e admit AggregatingInertia/*.lean; then exit 1; fi
+          lake env lean AggregatingInertia/Axioms.lean > axioms.txt
+          cat axioms.txt
+          python3 ../tests_ref/check_axioms.py AggregatingInertia/Axioms.lean axioms.txt
+
   docker:
     name: Docker image
     runs-on: ubuntu-latest

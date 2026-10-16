@@ -11,7 +11,8 @@ Every number, table and figure of
 > ([SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6019456)),
 
 computed by a numerical engine written in **Rust**, drawn with **Julia** (Makie), and packaged with **Docker**. The
-paper's own figures (TikZ and PGFPlots) are rebuilt from the engine's output as well.
+paper's own figures (TikZ and PGFPlots) are rebuilt from the engine's output as well, and the analytic results of
+Section 3 on the characteristic equation are proved in **Lean 4** with Mathlib (`lean/`).
 
 Households, forecasters and firms revise their plans in occasional lumps while their views drift, fade towards an
 anchor and absorb what others think. The paper shows how this inertia aggregates — where consensus breaks, how fast
@@ -118,6 +119,19 @@ One reference diagnostic that the paper does not use (the Monte Carlo against PD
 assigned whole PDE time steps to histogram bins, which made the PDE histogram uneven by about 20% from bin to bin; the
 engine splits each step's mass between the bins it overlaps.
 
+## Lean formalisation
+
+`lean/` proves in Lean 4 with Mathlib the analytic core of Section 3: Proposition 1(a), Theorem 1, the statements
+about roots in Theorem 2(b), Theorem 2(c) to first order, the algebra behind Theorem 2(a), and the example after
+Proposition 1 at `g = 7/2`. The formal statements concern the roots of the characteristic equation `1 = g k̂(z)` for a
+given kernel; the stochastic model behind the kernel and the Paley–Wiener step from roots to stability are not
+formalised. Every theorem uses only Lean's three standard axioms, which the workflow checks on every push.
+`lean/README.md` maps each Lean theorem to the paper and lists what is not checked.
+
+```sh
+cd lean && lake exe cache get && lake build
+```
+
 ## Figures
 
 `make figures` draws, in a light and a dark theme:
@@ -149,6 +163,7 @@ figures/     the figures, light and dark, PDF and PNG; figures/paper: the paper'
 paper/       the TikZ and PGFPlots sources of the paper's figures
 reference/   the paper's Python and C pipeline and its results
 tests_ref/   comparisons between the engine and the reference
+lean/        Lean 4 proofs of the analytic results of Section 3 (Mathlib)
 ```
 
 ## Cite
